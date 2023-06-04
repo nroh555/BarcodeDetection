@@ -29,21 +29,31 @@ def read_barcodes(image):
                 #Grab the product brand name
                 brand = loadedJSON["product"]["brands_tags"]
                 #Grab the nutrient levels of the product
-                nutrientsInfo = (loadedJSON["product"]["nutrient_levels"])
+                nutrients = (loadedJSON["product"]["nutrient_levels"])
+                #Checks if there is nutrients before being displayed
+                if(len(nutrients) > 0):
+                    nutrientsList = ""
+                    for nutrient, value in nutrients.items():
+                        nutrientsList = nutrientsList + ", " + nutrient[0:] + " - " + value[0:]
+                    nutrientsList = nutrientsList[1:]
+                else:
+                    nutrientsList = "Sorry! Nutrient levels not found"
             else:
                 title = "Product not found"
                 brand = "Brand not found"
-                nutrientsInfo = "Nutrients not found"
+                nutrientsList = "Nutrients not found"
         else:
             print("Item not found")
+
         #Gets the bounding box of the barcode
         (x, y , w, h) = barcode.rect
-        barcode_info = barcode.data.decode('utf-8')
-        information = "Barcode: {}, Title: {}, Brand: {}, Nutrients: {}".format(barcode_info, title, brand[0], nutrientsInfo)
+        barcode = barcode.data.decode('utf-8')
+        information = "Barcode: {}, Title: {}, Brand: {}, Nutrients: {}".format(barcode, title, brand[0], nutrientsList)
         #draws a rectangle over the barcode 
         cv2.rectangle(image, (x, y),(x+w, y+h), (0, 255, 0), 2)
         font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(image, information, (x + 6, y - 6), font, 2.0, (255, 255, 255), 2)
+        cv2.putText(image, barcode, (x + 6, y - 6), font, 0.5, (0, 0, 255), 1)
+        cv2.imshow("Image", image)
         #Writes the barcode, title, brand and nutrient info on the text file
         appendInfo("results.txt", information)
     return image
@@ -54,7 +64,7 @@ def main():
     while ret:
         ret, frame = stream.read()
         frame = read_barcodes(frame)
-        cv2.imshow('Barcode code reader', frame)
+        cv2.imshow('Barcode reader', frame)
         key = cv2.waitKey(1) & 0xFF == 27
         if key == ord("q"):
             break
