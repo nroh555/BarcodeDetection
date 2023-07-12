@@ -6,6 +6,7 @@ A real-time system that detects barcodes of food and drink products using OpenCV
 
 Below is a sample of the information retrieved from Open Food Facts API which is written to a text file.
 
-![image](https://github.com/nroh555/BarcodeDetection/assets/100507962/74dd211c-857e-40c4-a547-fdccdf0031d5)
+![image](https://github.com/nroh555/NutriScan/assets/100507962/a3e7da81-b190-47cb-90bd-e677946294cd)
+
 
 
